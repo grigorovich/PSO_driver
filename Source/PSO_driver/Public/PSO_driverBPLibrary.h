@@ -3,6 +3,7 @@
 #pragma once
 
 #include "Kismet/BlueprintFunctionLibrary.h"
+#include "ShaderPipelineCache.h"
 #include "PSO_driverBPLibrary.generated.h"
 
 /* 
@@ -22,30 +23,39 @@
 *	For more info on custom blueprint nodes visit documentation:
 *	https://wiki.unrealengine.com/Custom_Blueprint_Node_Creation
 */
+
+
 UCLASS()
 class UPSO_driverBPLibrary : public UBlueprintFunctionLibrary
 {
 	GENERATED_UCLASS_BODY()
 
-	UFUNCTION(BlueprintCallable, meta = (DisplayName = "PSO Pause Compiling Cache", Keywords = "PSO_driver stop compiling"), Category = "PSO_driverTesting")
-	static void PSO_PauseCompilingCache();
-	
-	UFUNCTION(BlueprintCallable, meta = (DisplayName = "PSO Is Compiling", Keywords = "PSO_driver check"), Category = "PSO_driverTesting")
-	static bool PSO_IsCompiling(int32& number_of_ordered);
-	
-	UFUNCTION(BlueprintCallable, meta = (DisplayName = "PSO Start Fast Compiling Cache", Keywords = "PSO_driver start compiling"), Category = "PSO_driverTesting")
-	static void PSO_StartFastCompilingCache();
-	
+	// ---------------------
+	// atomic functions
+	// ---------------------
 	UFUNCTION(BlueprintCallable, meta = (DisplayName = "PSO Save PipelineFileCache", Keywords = "PSO_driver Save Pipeline File Cache", ToolTip="Saves the current shader pipeline cache to disk using one of the defined save modes, Fast uses an incremental approach whereas Slow will consolidate all data into the file."), Category = "PSO_driverTesting")
 	static void PSO_SavePipelineFileCache();
 	
-	UFUNCTION(BlueprintCallable, meta = (DisplayName = "PSO Get NumPrecompilesActive", Keywords = "PSO_driver NumPrecompilesActive"), Category = "PSO_driverTesting")
+	UFUNCTION(BlueprintCallable, meta = (DisplayName = "PSO Get NumPrecompilesActive", Keywords = "PSO_driver NumPrecompilesActive", ToolTip="Returns the number of pipelines actively being precompiled this frame"), Category = "PSO_driverTesting")
 	static int32 PSO_NumPrecompilesActive();
 
-	UFUNCTION(BlueprintCallable, meta = (DisplayName = "PSO Get NumPrecompilesRemaining", Keywords = "PSO_driver NumPrecompilesRemaining"), Category = "PSO_driverTesting")
+	UFUNCTION(BlueprintCallable, meta = (DisplayName = "PSO Get NumPrecompilesRemaining", Keywords = "PSO_driver NumPrecompilesRemaining", ToolTip="Determine the total number of outstanding PSOs to compile and keep the loading screen or movie visible until complete."), Category = "PSO_driverTesting")
 	static int32 NumPrecompilesRemaining();
 
-	UFUNCTION(BlueprintCallable, meta = (DisplayName = "PSO Set BatchMode", Keywords = "PSO_driver Set BatchMode"), Category = "PSO_driverTesting")
-	static void PSO_SetBatchMode(BatchMode Mode);
+	UFUNCTION(BlueprintCallable, meta = (DisplayName = "PSO Set BatchMode", Keywords = "PSO_driver Set BatchMode", ToolTip="Sets the precompilation batching mode. 0 - Background, 1 - Fast, 2 - Precompile"), Category = "PSO_driverTesting")
+	static void PSO_SetBatchMode(int32 Mode);
+
+	// ---------------------
+	// complex functions
+	// ---------------------
+	UFUNCTION(BlueprintCallable, meta = (DisplayName = "PSO Pause Compiling Cache", Keywords = "PSO_driver stop compiling", ToolTip="#wip Need fillup"), Category = "PSO_driverTesting")
+	static void PSO_PauseCompilingCache();
+	
+	UFUNCTION(BlueprintCallable, meta = (DisplayName = "PSO Is Compiling", Keywords = "PSO_driver check", ToolTip="#wip Need fillup"), Category = "PSO_driverTesting")
+	static bool PSO_IsCompiling(int32& number_of_ordered);
+	
+	UFUNCTION(BlueprintCallable, meta = (DisplayName = "PSO Start Fast Compiling Cache", Keywords = "PSO_driver start compiling", ToolTip="#wip Need fillup"), Category = "PSO_driverTesting")
+	static void PSO_StartFastCompilingCache();
+	
 
 };
